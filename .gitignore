@@ -1,0 +1,27 @@
+_site
+_posts/_draft
+_posts/_archive
+_archive
+node_modules
+.vscode
+*.log
+live-*.png
+*.lock
+*.sh
+.DS_Store
+.jekyll-cache
+.blog-admin-trash/
+__pycache__/
+*.py[cod]
+CNBlogs_BlogBackup_*.xml
+*.lnk
+*/.DS_Store
+*/*/.DS_Store
+# Legacy assets kept locally for reference but not published.
+/img/avatar-hux*.jpg
+/img/bg-me-2022.jpg
+/img/blog-*.jpg
+/img/blog-*.gif
+/img/contact-bg.jpg
+/img/post-bg-*.jpg
+/img/post-sample-image.jpg

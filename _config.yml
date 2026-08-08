@@ -1,0 +1,114 @@
+# Public configuration for the reusable Jekyll starter.
+# Most site-specific values belong here; layouts should remain generic.
+title: "Example Site"
+SEOTitle: "Example Site | Jekyll Starter"
+author: "Example Author"
+header-img: img/home-bg-geek.jpg
+email: ""
+description: "A reusable Jekyll starter for a personal site, project journal, or technical blog."
+keyword: "Jekyll, GitHub Pages, static site, notes, projects"
+url: "https://example.github.io"
+baseurl: ""
+
+# Home identity
+home-tagline: "Build clearly. Learn continuously."
+home-status: "Ready to explore."
+home-principles:
+  - "Make it understandable"
+  - "Keep it reproducible"
+  - "Leave room to experiment"
+footer-signature: "Example Site // Stay curious. Keep building."
+
+# Public feature switches. Legacy keys below are kept for compatibility with
+# the original Jekyll theme while the template is gradually refactored.
+features:
+  search: true
+  mathjax: true
+  encryption: true
+  pageviews: true
+  pwa: true
+  comments: false
+  analytics: false
+
+locale:
+  default: zh-CN
+  supported:
+    - zh-CN
+    - en
+
+# Social links. Leave a value empty to hide the icon.
+social:
+  github: ""
+  zhihu: ""
+  weibo: ""
+  twitter: ""
+  linkedin: ""
+
+# Legacy social keys consumed by the original include.
+RSS: true
+github_username:
+zhihu_username:
+weibo_username:
+twitter_username:
+facebook_username:
+linkedin_username:
+
+# Page view counter. Disabled by default for a fresh template.
+pageviews:
+  enable: false
+  show-site-total: false
+
+# Publish posts or collection documents with a future date.
+future: true
+
+# Build settings
+highlighter: rouge
+permalink: pretty
+paginate: 10
+exclude:
+  - less
+  - node_modules
+  - tools
+  - manage-blog.cmd
+  - manage-blog.ps1
+  - Gruntfile.js
+  - package.json
+  - package-lock.json
+  - README.md
+  - README.zh.md
+  - BLOG_TEMPLATE_HANDOFF.md
+anchorjs: true
+plugins: [jekyll-paginate]
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
+# Optional integrations. Empty values keep them off.
+disqus_username:
+netease_comment: false
+ga_track_id: ""
+ga_domain:
+ba_track_id:
+
+# Sidebar settings
+sidebar: true
+sidebar-about-description: "A small corner for notes, projects, and experiments."
+sidebar-avatar: img/avatar-lab.svg
+featured-tags: true
+featured-condition-size: 0
+friends: []
+
+# Progressive Web App
+chrome-tab-theme-color: "#101412"
+service-worker: false
+
+# MathJax rendering for page previews
+page-mathjax: false

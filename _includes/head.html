@@ -1,0 +1,87 @@
+<head>
+    <meta charset="utf-8">
+    <script>
+        (function () {
+            var theme = 'light';
+            try {
+                var savedTheme = localStorage.getItem('example-site-theme');
+                theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            } catch (error) {
+                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.style.colorScheme = theme;
+        }());
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="{% if page.encrypted %}这是一篇密码保护文章，正文需要在浏览器中解锁。{% elsif page.description %}{{ page.description | strip_html | escape }}{% else %}{{ site.description | escape }}{% endif %}">
+    <meta name="keywords" content="{{ site.keyword | escape }}">
+    <meta name="theme-color" content="{{ site.chrome-tab-theme-color }}">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="{% if page.title %}{{ page.title | escape }} - {{ site.SEOTitle | escape }}{% else %}{{ site.SEOTitle | escape }}{% endif %}">
+    {% case page.layout %}
+    {% when 'post' %}
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="{% if page.encrypted %}这是一篇密码保护文章，正文需要在浏览器中解锁。{% else %}{{ page.excerpt | strip_html | truncate:200 | escape }}{% endif %}">
+    {% if page.date %}
+    <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+    {% endif %}
+    {% if page.author %}
+    <meta property="article:author" content="{{ page.author | escape }}">
+    {% endif %}
+    {% for tag in page.tags %}
+    <meta property="article:tag" content="{{ tag | escape }}">
+    {% endfor %}
+    {% else %}
+    <meta property="og:type" content="website">
+    <meta property="og:description"
+        content="{% if page.description %}{{ page.description | strip_html | escape }}{% else %}{{ site.description | escape }}{% endif %}">
+    {% endcase %}
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/{{ site.sidebar-avatar }}">
+    <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}{{ page.url }}">
+    <meta property="og:site_name" content="{{ site.SEOTitle }}">
+
+    <title>{% if page.title %}{{ page.title }} - {{ site.SEOTitle }}{% else %}{{ site.SEOTitle }}{% endif %}</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="{{ site.baseurl }}/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ site.baseurl }}/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ site.baseurl }}/img/favicon-16x16.png">
+    <link rel="shortcut icon" href="{{ site.baseurl }}/img/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ site.baseurl }}/img/apple-touch-icon.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="{{ "/css/bootstrap.min.css" | prepend: site.baseurl }}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ "/css/hux-blog.min.css" | prepend: site.baseurl }}">
+
+    <!-- Template visual layer -->
+    <link rel="stylesheet" href="{{ "/css/custom.css" | prepend: site.baseurl }}">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
+        crossorigin="anonymous" referrerpolicy="no-referrer" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+</head>

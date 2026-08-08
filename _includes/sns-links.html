@@ -1,0 +1,59 @@
+{% comment %}
+  Social links are configured under site.social. Legacy *_username keys are
+  accepted as a migration fallback for sites copied from the original theme.
+{% endcomment %}
+{% assign github = site.social.github | default: site.github_username %}
+{% assign zhihu = site.social.zhihu | default: site.zhihu_username %}
+{% assign weibo = site.social.weibo | default: site.weibo_username %}
+{% assign twitter = site.social.twitter | default: site.twitter_username %}
+{% assign linkedin = site.social.linkedin | default: site.linkedin_username %}
+
+{% if include.center %}
+<ul class="list-inline text-center">
+{% else %}
+<ul class="list-inline">
+{% endif %}
+
+  {% if site.RSS %}
+  <li>
+    <a href="{{ "/feed.xml" | prepend: site.baseurl }}" aria-label="RSS">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if twitter %}
+  <li>
+    <a target="_blank" rel="noopener" href="https://twitter.com/{{ twitter }}" aria-label="Twitter">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if zhihu %}
+  <li>
+    <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/{{ zhihu }}" aria-label="知乎">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-stack-1x fa-inverse">知</i></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if weibo %}
+  <li>
+    <a target="_blank" rel="noopener" href="https://weibo.com/{{ weibo }}" aria-label="微博">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-weibo fa-stack-1x fa-inverse"></i></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if github %}
+  <li>
+    <a target="_blank" rel="noopener" href="https://github.com/{{ github }}" aria-label="GitHub">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-github fa-stack-1x fa-inverse"></i></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if linkedin %}
+  <li>
+    <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/{{ linkedin }}" aria-label="LinkedIn">
+      <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span>
+    </a>
+  </li>
+  {% endif %}
+</ul>

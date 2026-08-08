@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Example Site · Blog Admin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2318191b'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='monospace' font-size='25' font-weight='700' fill='%2391c39f'%3EMP%3C/text%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var saved = localStorage.getItem('example-site-admin-theme');
+      var theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    }());
+  </script>
+  <link rel="stylesheet" href="/assets/app.css">
+  <script>
+    window.MathJax = {
+      loader: { load: ['[tex]/ams'] },
+      tex: {
+        packages: { '[+]': ['ams'] },
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"
+    integrity="sha384-/TQbtLCAerC3jgaim+N78RZSDYV7ryeoBCVqTuzRrFec2akfBkHS7ACQ3PQhvMVi" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
+    integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"
+    integrity="sha384-KKWa9jJ1MZvssLeOoXG6FiOAZfAgmzsIIfw8BXwI9+kYm0lPCbC6yTQPBC00F1/L" crossorigin="anonymous"></script>
+  <script defer src="/assets/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar">
+      <div class="brand-block">
+        <div class="brand-mark">MP</div>
+        <div>
+          <strong>Example Site</strong>
+          <span>Blog Admin</span>
+        </div>
+      </div>
+
+      <nav class="app-nav" aria-label="管理面板导航">
+        <button class="nav-item is-active" data-view-target="posts">
+          <span class="nav-icon">▦</span><span>文章</span>
+        </button>
+        <button class="nav-item" data-action="new-post">
+          <span class="nav-icon">＋</span><span>写文章</span>
+        </button>
+        <button class="nav-item" data-view-target="settings">
+          <span class="nav-icon">⌘</span><span>站点设置</span>
+        </button>
+        <button class="nav-item" data-view-target="import">
+          <span class="nav-icon">⇩</span><span>批量导入</span>
+        </button>
+        <button class="nav-item" data-view-target="publish">
+          <span class="nav-icon">↑</span><span>发布</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="local-badge"><i></i> 仅本机可访问</div>
+        <button class="quiet-button" id="admin-theme-toggle" type="button">切换夜间模式</button>
+        <a class="quiet-button" href="/" target="_blank" rel="noopener">打开本地网站 ↗</a>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="topbar">
+        <button class="mobile-menu" type="button" aria-label="打开导航">☰</button>
+        <div>
+          <p class="eyebrow" id="view-eyebrow">CONTENT</p>
+          <h1 id="view-title">文章管理</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="save-state" id="save-state">已同步</span>
+          <button class="icon-button" id="refresh-button" type="button" title="刷新数据">↻</button>
+        </div>
+      </header>
+
+      <section class="view is-active" data-view="posts">
+        <div class="section-toolbar">
+          <label class="search-field">
+            <span>⌕</span>
+            <input id="post-search" type="search" placeholder="搜索标题、标签或摘要">
+          </label>
+          <div class="filter-group" aria-label="文章状态筛选">
+            <button class="filter-button is-active" data-post-filter="all">全部</button>
+            <button class="filter-button" data-post-filter="published">已发布</button>
+            <button class="filter-button" data-post-filter="draft">草稿</button>
+          </div>
+          <button class="primary-button" data-action="new-post" type="button">＋ 新文章</button>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card"><span>全部文章</span><strong id="count-all">0</strong></article>
+          <article class="summary-card"><span>已发布</span><strong id="count-published">0</strong></article>
+          <article class="summary-card"><span>本地草稿</span><strong id="count-drafts">0</strong></article>
+        </div>
+
+        <div class="bulk-publish-bar" id="bulk-publish-bar" hidden>
+          <label class="check-field">
+            <input id="select-all-drafts" type="checkbox">
+            <span>选择全部草稿</span>
+          </label>
+          <span id="bulk-publish-count">已选择 0 篇</span>
+          <button class="primary-button" id="bulk-publish-drafts" type="button" disabled>批量转为已发布</button>
+        </div>
+
+        <div class="post-list" id="post-list" aria-live="polite"></div>
+      </section>
+
+      <section class="view" data-view="editor">
+        <form id="post-form" class="editor-form">
+          <div class="editor-toolbar">
+            <button class="secondary-button" type="button" data-view-target="posts">← 返回文章</button>
+            <div class="editor-toolbar__right">
+              <button class="danger-button" id="trash-post" type="button" hidden>移入回收目录</button>
+              <button class="primary-button" type="submit">保存到本地</button>
+            </div>
+          </div>
+
+          <div class="editor-layout">
+            <section class="editor-fields panel">
+              <div class="field-row two-columns">
+                <label>状态
+                  <select name="status">
+                    <option value="draft">草稿</option>
+                    <option value="published">已发布</option>
+                  </select>
+                </label>
+                <label>发布日期
+                  <input name="date" type="datetime-local" required>
+                </label>
+              </div>
+
+              <label>文章标题
+                <input name="title" type="text" maxlength="160" placeholder="输入文章标题" required>
+              </label>
+              <label>副标题
+                <input name="subtitle" type="text" maxlength="220" placeholder="一句话说明文章讨论什么">
+              </label>
+              <div class="field-row two-columns">
+                <label>文件 slug
+                  <input name="slug" type="text" maxlength="100" placeholder="my-new-post" required>
+                  <small>用于生成文章文件名，可以使用中文、英文、数字和连字符。</small>
+                </label>
+                <label>作者
+                  <input name="author" type="text" maxlength="80">
+                </label>
+              </div>
+              <label>标签
+                <input name="tags" type="text" placeholder="Web, 工程实践, Jekyll">
+                <small>使用逗号分隔多个标签。</small>
+              </label>
+              <div class="field-row two-columns">
+                <label>页眉图片
+                  <input name="headerImage" type="text" placeholder="img/bg-little-universe.jpg">
+                </label>
+                <label>图片遮罩 <output id="mask-output">0.45</output>
+                  <input name="headerMask" type="range" min="0" max="0.85" step="0.05" value="0.45">
+                </label>
+              </div>
+              <label class="check-field">
+                <input name="mathjax" type="checkbox">
+                <span>启用 MathJax 数学公式</span>
+              </label>
+              <label class="check-field encryption-toggle">
+                <input name="encrypted" type="checkbox">
+                <span>使用密码加密正文</span>
+              </label>
+              <section class="encryption-panel" id="encryption-panel" hidden>
+                <div class="encryption-panel__heading">
+                  <span aria-hidden="true">⌁</span>
+                  <div>
+                    <strong id="encryption-state">准备加密</strong>
+                    <small id="encryption-help">密码只在当前浏览器内使用，不会发送给本地后端或 GitHub。</small>
+                  </div>
+                </div>
+                <label>文章密码
+                  <input name="encryptionPassword" type="password" minlength="10" autocomplete="new-password" placeholder="至少 10 个字符">
+                </label>
+                <label id="encryption-confirm-field">确认密码
+                  <input name="encryptionPasswordConfirm" type="password" minlength="10" autocomplete="new-password" placeholder="再次输入密码">
+                </label>
+                <button class="secondary-button" id="unlock-post" type="button" hidden>解锁并编辑正文</button>
+              </section>
+            </section>
+
+            <section class="writing-panel panel">
+              <div class="writing-tabs" role="tablist">
+                <button class="writing-tab is-active" type="button" data-writing-tab="write">Markdown</button>
+                <button class="writing-tab" type="button" data-writing-tab="preview">预览</button>
+                <span>支持 <code>$...$</code> 与 <code>$$...$$</code></span>
+              </div>
+              <div class="writing-surface is-active" data-writing-surface="write">
+                <textarea name="content" id="post-content" spellcheck="false" placeholder="从这里开始写作……"></textarea>
+              </div>
+              <article class="writing-surface markdown-preview" data-writing-surface="preview" id="markdown-preview"></article>
+            </section>
+          </div>
+        </form>
+      </section>
+
+      <section class="view" data-view="settings">
+        <form id="settings-form" class="settings-grid">
+          <section class="panel settings-section">
+            <div class="section-heading">
+              <p class="eyebrow">IDENTITY</p>
+              <h2>站点身份</h2>
+            </div>
+            <label>站点名称<input name="title" type="text" required></label>
+            <label>浏览器标题<input name="SEOTitle" type="text" required></label>
+            <label>站点描述<textarea name="description" rows="3"></textarea></label>
+            <label>搜索关键词<input name="keyword" type="text"></label>
+            <label>GitHub 用户名<input name="github_username" type="text"></label>
+          </section>
+
+          <section class="panel settings-section">
+            <div class="section-heading">
+              <p class="eyebrow">HOME</p>
+              <h2>首页文字</h2>
+            </div>
+            <label>首屏副标题<input name="home-tagline" type="text"></label>
+            <label>当前状态<input name="home-status" type="text"></label>
+            <label>个人原则<textarea name="home-principles" rows="4" placeholder="每行一条原则"></textarea></label>
+            <label>侧栏介绍<textarea name="sidebar-about-description" rows="4"></textarea></label>
+            <label>页脚签名<input name="footer-signature" type="text"></label>
+          </section>
+
+          <div class="form-actions">
+            <button class="primary-button" type="submit">保存站点设置</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="view" data-view="import">
+        <div class="import-layout">
+          <section class="panel import-card">
+            <p class="eyebrow">MIGRATE</p>
+            <h2>批量导入博客园文章</h2>
+            <p class="panel-description">选择博客园导出的 XML 文件，先预览文章，再将选中的内容导入为本地草稿。</p>
+            <label class="file-picker">博客园 XML 备份
+              <input id="cnblogs-file" type="file" accept=".xml,text/xml,application/xml">
+            </label>
+            <div class="import-file-name" id="cnblogs-file-name">尚未选择文件</div>
+            <div class="import-actions">
+              <button class="secondary-button" id="cnblogs-preview" type="button" disabled>读取并预览</button>
+              <button class="primary-button" id="cnblogs-import" type="button" disabled>导入选中的文章</button>
+            </div>
+            <p class="import-note">导入结果会进入 <code>_drafts/</code>，不会直接发布到线上；确认内容后，再到“文章”中逐篇检查。</p>
+          </section>
+
+          <aside class="panel import-help">
+            <p class="eyebrow">HOW IT WORKS</p>
+            <h2>迁移流程</h2>
+            <ol>
+              <li><span>01</span>选择博客园 XML 备份</li>
+              <li><span>02</span>检查标题、日期和正文摘要</li>
+              <li><span>03</span>选择要导入的文章</li>
+              <li><span>04</span>导入为本地草稿</li>
+            </ol>
+            <label class="check-field import-select-all">
+              <input id="cnblogs-select-all" type="checkbox" disabled>
+              <span>全选预览中的文章</span>
+            </label>
+          </aside>
+        </div>
+        <section class="panel import-preview-panel">
+          <div class="section-heading import-preview-heading">
+            <div><p class="eyebrow">PREVIEW</p><h2>文章预览</h2></div>
+            <span id="cnblogs-import-summary">尚未读取 XML</span>
+          </div>
+          <div class="import-preview-list" id="cnblogs-preview-list" aria-live="polite">
+            <div class="empty-state"><strong>等待选择文件</strong><span>请选择博客园备份 XML，然后点击“读取并预览”。</span></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view="publish">
+        <div class="publish-layout">
+          <section class="panel publish-card">
+            <p class="eyebrow">GIT STATUS</p>
+            <div class="publish-heading">
+              <div>
+                <h2>发布到 GitHub Pages</h2>
+                <p>只会提交文章、草稿和 <code>_config.yml</code>，不会执行任意命令。</p>
+              </div>
+              <span class="branch-badge" id="git-branch">main</span>
+            </div>
+            <div class="git-state" id="git-state"></div>
+            <form id="publish-form" class="publish-form">
+              <label>提交说明
+                <input name="message" type="text" maxlength="120" value="Publish blog updates" required>
+              </label>
+              <button class="primary-button" type="submit">提交并推送</button>
+            </form>
+          </section>
+
+          <aside class="panel publish-notes">
+            <p class="eyebrow">FLOW</p>
+            <h2>发布流程</h2>
+            <ol>
+              <li><span>01</span>保存文章与站点设置</li>
+              <li><span>02</span>确认待提交文件</li>
+              <li><span>03</span>Git commit 与 push</li>
+              <li><span>04</span>等待 GitHub Pages 构建</li>
+            </ol>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-mark">MP</div>
+    <p>正在连接本地博客……</p>
+  </div>
+</body>
+</html>

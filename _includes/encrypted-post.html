@@ -1,0 +1,16 @@
+<section class="encrypted-post-gate" id="encrypted-post-gate" data-mathjax="{{ page.mathjax | default: false }}">
+    <div class="encrypted-post-gate__icon" aria-hidden="true">⌁</div>
+    <p class="encrypted-post-gate__eyebrow">PROTECTED ENTRY</p>
+    <h2>这篇文章已加密</h2>
+    <p>密码只用于当前浏览器中的本地解密，不会发送到服务器。</p>
+    <form id="encrypted-post-form" class="encrypted-post-form" autocomplete="off">
+        <label for="encrypted-post-password">文章密码</label>
+        <div class="encrypted-post-form__row">
+            <input id="encrypted-post-password" type="password" minlength="10" autocomplete="off" required placeholder="输入文章密码">
+            <button type="submit">解锁正文</button>
+        </div>
+        <p class="encrypted-post-error" id="encrypted-post-error" role="alert" aria-live="polite"></p>
+    </form>
+</section>
+<div class="protected-post-content" id="protected-post-content" hidden></div>
+<noscript><p class="encrypted-post-noscript">这篇文章需要启用 JavaScript 才能在本地解密。</p></noscript>

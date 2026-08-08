@@ -1,0 +1,16 @@
+<section class="visible-md visible-lg">
+  <hr>
+  <h5><a href="{{'/about/' | prepend: site.baseurl }}" data-i18n="about">关于本站</a></h5>
+  <div class="short-about">
+    {% if site.sidebar-avatar %}
+    <div class="avatar-orbit">
+      <img src="{{ site.baseurl }}/{{ site.sidebar-avatar }}" alt="{{ site.author }} 的头像" />
+    </div>
+    {% endif %}
+    {% if site.sidebar-about-description %}
+    <p>{{site.sidebar-about-description}}</p>
+    {% endif %}
+    <!-- SNS Link -->
+    {% include sns-links.html %}
+  </div>
+</section>

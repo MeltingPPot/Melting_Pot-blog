@@ -1,0 +1,19 @@
+{
+  "name": "Example Site",
+  "short_name": "Example Site",
+  "description": "A reusable Jekyll website starter.",
+  "icons": [{
+    "src": "icons/128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }, {
+    "src": "icons/512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#171a18",
+  "theme_color": "#171a18",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait"
+}

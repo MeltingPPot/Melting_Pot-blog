@@ -1,0 +1,72 @@
+---
+layout: page
+description: "记录代码、系统与长期主义。"
+mathjax: true
+---
+
+<section class="home-console" aria-label="{{ site.title }} 当前状态" data-reveal>
+    <div class="home-console__bar">
+        <span class="home-console__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>{{ site.title | upcase }} / STATUS</span>
+        <span class="home-console__signal">ONLINE</span>
+    </div>
+    <div class="home-console__body">
+        <div class="home-console__status">
+            <span class="home-console__prompt" aria-hidden="true">&gt;_</span>
+            <div>
+                <span class="home-console__label">CURRENT STATE</span>
+                <strong>{{ site["home-status"] }}</strong>
+            </div>
+        </div>
+        <div class="home-console__principles">
+            {% for principle in site["home-principles"] %}
+            <span><i aria-hidden="true">0{{ forloop.index }}</i>{{ principle }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% for post in paginator.posts %}
+<div class="post-preview" data-reveal>
+    <a href="{{ post.url | prepend: site.baseurl }}">
+        <h2 class="post-title">
+            {{ post.title }}
+        </h2>
+        {% if post.subtitle %}
+        <h3 class="post-subtitle">
+            {{ post.subtitle }}
+        </h3>
+        {% endif %}
+        <div class="post-content-preview">
+            {% if post.encrypted %}
+                <span class="protected-post-label" aria-label="密码保护文章">🔒 密码保护文章</span>
+                正文将在输入密码后于浏览器本地解锁。
+            {% elsif post.lang == 'en' %}
+                {{ post.content | strip_html | truncate:300 }}
+            {% else %}
+                {{ post.content | strip_html | truncate:200 }}
+            {% endif %}
+        </div>
+    </a>
+    <p class="post-meta">
+        记录于 {{ post.date | date: "%Y.%m.%d" }} · {% if post.author %}{{ post.author }}{% else %}{{ site.author }}{% endif %}
+    </p>
+</div>
+<hr>
+{% endfor %}
+
+<!-- Pager -->
+{% if paginator.total_pages > 1 %}
+<ul class="pager">
+    {% if paginator.previous_page %}
+    <li class="previous">
+        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
+    </li>
+    {% endif %}
+    {% if paginator.next_page %}
+    <li class="next">
+        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
+{% endif %}
