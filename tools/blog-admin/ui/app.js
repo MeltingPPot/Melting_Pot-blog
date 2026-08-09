@@ -76,9 +76,10 @@
   }
 
   function renderMarkdownForEncryption(markdown) {
-    if (!window.marked || !window.DOMPurify) throw new Error('Markdown 安全渲染组件尚未加载，请稍后重试。');
-    window.marked.setOptions({ gfm: true, breaks: false });
-    return window.DOMPurify.sanitize(window.marked.parse(markdown));
+    if (!window.marked || !window.DOMPurify || !window.BlogMathMarkdown) {
+      throw new Error('Markdown 安全渲染组件尚未加载，请稍后重试。');
+    }
+    return window.BlogMathMarkdown.render(markdown, window.marked, window.DOMPurify);
   }
 
   async function encryptPostDocument(markdown, password) {
@@ -545,10 +546,8 @@
     }
     var markdown = fields.content.value || '';
     var rendered;
-    if (window.marked && window.DOMPurify) {
-      window.marked.setOptions({ gfm: true, breaks: false });
-      rendered = window.marked.parse(markdown);
-      rendered = window.DOMPurify.sanitize(rendered);
+    if (window.marked && window.DOMPurify && window.BlogMathMarkdown) {
+      rendered = window.BlogMathMarkdown.render(markdown, window.marked, window.DOMPurify);
     } else {
       rendered = '<pre>' + escapeHtml(markdown) + '</pre>';
     }
